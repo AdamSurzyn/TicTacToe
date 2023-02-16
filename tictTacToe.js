@@ -1,4 +1,4 @@
-let gameBoard = (function(){
+let gameBoard = (() => {
 
     let board = document.querySelector(".board")
     let boardArray = 
@@ -18,11 +18,36 @@ let gameBoard = (function(){
             }
         }
     }
+ 
+    const wipeBoard = () =>{
+
+    }
 
     return {
         makeBoard
     }
 })()
 
-let somethingToLog = "log meeeee"
 gameBoard.makeBoard()
+
+
+const gameState = (() => {
+
+    const checkScore = () =>{
+
+    }
+
+    const checkTie = () => {
+
+    }
+
+
+
+})()
+
+
+const player = (mark) =>{
+
+    let score = 0;
+    let mark = this.mark
+}
