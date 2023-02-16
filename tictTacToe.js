@@ -61,6 +61,12 @@ const gameState = (() => {
             return (element === "X" || element === "O")
         }
 
+        /*
+        *******************
+        check what is being returned and checked in checkrows function, 
+        maybe figure out a way for it to be less complicated
+        *******************
+        */
 
         const checkRows = (array) => array.forEach((row) => {
             console.log(row.every(isXorO))
