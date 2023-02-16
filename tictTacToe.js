@@ -22,7 +22,7 @@ const gameBoard = (() => {
         for (i = 0; i < boardArray.length; i ++){
             for (j = 0; j < boardArray[i].length; j++){
                 makeACell()
-                boardArray[i][j] = ""
+                boardArray[i][j] = "X"
                 
             }
         }
@@ -48,29 +48,44 @@ const gameBoard = (() => {
 })()
 
 gameBoard.makeBoard()
-let boardArray = gameBoard.boardArray
-
 
 const gameState = (() => {
 
-    const checkWin = (boardArray) =>{
+    const checkWin = () =>{
 
-        let isXorO = (cell) => (cell == "X" || "O")
 
-        const checkRows = boardArray.array.forEach(row => {
-            row.every(isXorO)
+        let boardArray = gameBoard.boardArray
+
+        let transposedBoardArray = boardArray[0].map((_, colIndex) => boardArray.map(row => row[colIndex]));
+        const isXorO = (element) => {
+            return (element === "X" || element === "O")
+        }
+
+
+        const checkRows = (array) => array.forEach((row) => {
+            console.log(row.every(isXorO))
+            let isRowWinning = row.every(isXorO)
+            if(isRowWinning){
+                return array[0][0]
+            }
         });
-        
+
+        if(checkRows(boardArray) === "X" || checkRows(boardArray) === "O"){
+            return `Player ${checkRows(boardArray)} wins!`
+        }
     }
 
     const checkTie = () => {
 
     }
 
-
+    return{
+        checkWin
+    }
 
 })()
 
+gameState.checkWin()
 
 const player = (playerSign) =>{
 
