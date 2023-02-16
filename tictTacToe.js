@@ -24,4 +24,5 @@ let gameBoard = (function(){
     }
 })()
 
+let somethingToLog = "log meeeee"
 gameBoard.makeBoard()
