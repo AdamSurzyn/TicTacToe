@@ -1,7 +1,9 @@
+const board = document.querySelector(".board")
+let playingNow 
 
 const gameBoard = (() => {
 
-    let board = document.querySelector(".board")
+    
     let boardArray = 
     [
         [0,0,0],
@@ -20,11 +22,10 @@ const gameBoard = (() => {
     }
 
     const makeBoard = () =>{
+
         for (i = 0; i < boardArray.length; i ++){
             for (j = 0; j < boardArray[i].length; j++){
                 makeACell()
-                boardArray[i][j] = "X"
-                
             }
         }
         id = 0
@@ -35,7 +36,7 @@ const gameBoard = (() => {
         for (i = 0; i < boardArray.length; i ++){
             for (j = 0; j < boardArray[i].length; j++){
                
-                board.querySelector("id", id).textContent = boardArray[i][j].toString()
+                boardArray[i][j] = board.querySelector("id", id).textContent
                 id++
             }
         }
@@ -44,33 +45,26 @@ const gameBoard = (() => {
 
     return {
         makeBoard,
+        rerenderBoard,
         boardArray
     }
 })()
 
 gameBoard.makeBoard()
 let boardArray = gameBoard.boardArray
+
 const gameState = (() => {
 
     const checkWin = () =>{
 
-        let win = ["X", "O"]
 
         let transposedBoardArray = boardArray[0].map((_, colIndex) => boardArray.map(row => row[colIndex]));
         const isXorO = (element, n, row) => {
-            if(element === row[0]){
+            if(element === row[0] && !element === 0){
                 return true
             }
             return false
         }
-
-        /*
-        *******************
-        check what is being returned and checked in checkrows function, 
-        maybe figure out a way for it to be less complicated
-        *******************
-        */
-
 
 
         const checkRows = (array) =>{
@@ -84,9 +78,10 @@ const gameState = (() => {
                     return true
                 }
     
-                return false
             }
-            
+        
+        return false
+
         };
         
 
@@ -101,11 +96,35 @@ const gameState = (() => {
 
     const checkTie = () => {
         for(i=0; i<boardArray.length;i++){
-            if(!boardArray[i].contains(undefined)){
+            if(!boardArray[i].contains(0)){
                 return true
             }
         }
         return false
+    }
+ 
+    const isFirstTurn = () =>{
+        for(i=0;i<boardArray.length;i++){
+            if(boardArray[i].every((el)=>{
+                el === 0
+            })){
+                return true
+            }
+        }
+        return false
+
+    }
+
+    const nextPlayer = (currentPlayer) =>{ 
+
+        let nextPlayer
+        if(currentPlayer === "X"){
+            nextPlayer = "O"
+        }else if (currentPlayer === "O"){
+            nextPlayer = "X"
+        }
+
+    return nextPlayer
     }
 
     return{
@@ -116,15 +135,24 @@ const gameState = (() => {
 })()
 
 
-const player = (playerSign) =>{
+const player = (mark) =>{
 
     let score = 0;
-    let mark = this.playerSign
+    let name = `Player ${mark}`
 
-    const choosePoint = () =>{
+    const addToScore = () =>{
 
     }
 
+    return{
+
+    }
 }
 
+let playerX = player("X")
+let playerO = player("O")
+
+console.log(playerX.name)
+
+console.log(boardArray)
 console.log(gameState.checkWin())
