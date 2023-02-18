@@ -10,13 +10,13 @@ const gameBoard = (() => {
         [0,0,0],
         [0,0,0]
     ]
-    let id = 0
+    let id = 1
 
     
     
     const makeACell = () =>{
         let field = document.createElement("li")
-        field.setAttribute("id", `field${id+1}`)
+        field.setAttribute("id", `field${id}`)
         id++
         board.appendChild(field)
     }
@@ -28,19 +28,22 @@ const gameBoard = (() => {
                 makeACell()
             }
         }
-        id = 0
+        id = 1
 
     }
 
     const rerenderBoard = () =>{
         for (i = 0; i < boardArray.length; i ++){
             for (j = 0; j < boardArray[i].length; j++){
-               
-                boardArray[i][j] = board.querySelector("id", id).textContent
-                id++
+                if(!board.querySelector(`#field${id}`).innerText == ""){
+                    boardArray[i][j] = board.querySelector(`#field${id}`).innerText
+                    id++
+                }else{
+                    id++
+                }
             }
         }
-        id = 0
+        id = 1
     }
 
     return {
@@ -60,7 +63,7 @@ const gameState = (() => {
 
         let transposedBoardArray = boardArray[0].map((_, colIndex) => boardArray.map(row => row[colIndex]));
         const isXorO = (element, n, row) => {
-            if(element === row[0] && !element === 0){
+            if(element === row[0] && !(element === 0)){
                 return true
             }
             return false
@@ -70,7 +73,7 @@ const gameState = (() => {
         const checkRows = (array) =>{
             
             for (let i = 0; i < array.length; i++){
-
+  
                 let isRowWinning = array[i].every(isXorO)
 
                 if(isRowWinning){
@@ -96,23 +99,24 @@ const gameState = (() => {
 
     const checkTie = () => {
         for(i=0; i<boardArray.length;i++){
-            if(!boardArray[i].contains(0)){
+            if(!(boardArray[i].includes(0))){
                 return true
             }
         }
         return false
     }
  
-    const isFirstTurn = () =>{
+    const isFirstTurn = () =>{ 
+
         for(i=0;i<boardArray.length;i++){
-            if(boardArray[i].every((el)=>{
-                el === 0
-            })){
-                return true
+            for(j=0; j<boardArray[i].length;j++){
+                console.log(boardArray[i][j])
+                if(!(boardArray[i][j] === 0)){
+                    return false
+                }
             }
         }
-        return false
-
+    return true
     }
 
     const nextPlayer = (currentPlayer) =>{ 
@@ -129,7 +133,9 @@ const gameState = (() => {
 
     return{
         checkWin,
-        checkTie
+        checkTie,
+        isFirstTurn,
+        nextPlayer
     }
 
 })()
@@ -145,14 +151,27 @@ const player = (mark) =>{
     }
 
     return{
-
+        
     }
 }
 
 let playerX = player("X")
 let playerO = player("O")
 
-console.log(playerX.name)
+board.addEventListener("click", (e) =>{
+    if(gameState.isFirstTurn()){
+        e.target.innerText = "X"
+        playingNow = gameState.nextPlayer("X")
+        gameBoard.rerenderBoard()
+        gameState.checkWin()
+        gameState.checkTie()
+    }else{
+        e.target.innerText = playingNow
+        playingNow = gameState.nextPlayer(playingNow)
+        gameBoard.rerenderBoard()
+        gameState.checkWin()
+        gameState.checkTie()
+    }
+})
 
-console.log(boardArray)
-console.log(gameState.checkWin())
+console.log(gameState.isFirstTurn())
