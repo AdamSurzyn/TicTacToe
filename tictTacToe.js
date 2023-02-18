@@ -1,3 +1,4 @@
+
 const gameBoard = (() => {
 
     let board = document.querySelector(".board")
@@ -48,17 +49,19 @@ const gameBoard = (() => {
 })()
 
 gameBoard.makeBoard()
-
+let boardArray = gameBoard.boardArray
 const gameState = (() => {
 
     const checkWin = () =>{
 
-
-        let boardArray = gameBoard.boardArray
+        let win = ["X", "O"]
 
         let transposedBoardArray = boardArray[0].map((_, colIndex) => boardArray.map(row => row[colIndex]));
-        const isXorO = (element) => {
-            return (element === "X" || element === "O")
+        const isXorO = (element, n, row) => {
+            if(element === row[0]){
+                return true
+            }
+            return false
         }
 
         /*
@@ -68,30 +71,50 @@ const gameState = (() => {
         *******************
         */
 
-        const checkRows = (array) => array.forEach((row) => {
-            console.log(row.every(isXorO))
-            let isRowWinning = row.every(isXorO)
-            if(isRowWinning){
-                return array[0][0]
-            }
-        });
 
-        if(checkRows(boardArray) === "X" || checkRows(boardArray) === "O"){
-            return `Player ${checkRows(boardArray)} wins!`
+
+        const checkRows = (array) =>{
+            
+            for (let i = 0; i < array.length; i++){
+
+                let isRowWinning = array[i].every(isXorO)
+
+                if(isRowWinning){
+                    
+                    return true
+                }
+    
+                return false
+            }
+            
+        };
+        
+
+        if(checkRows(boardArray)){
+            return true
+        }else if(checkRows(transposedBoardArray)){
+            return true
         }
+
+        return false
     }
 
     const checkTie = () => {
-
+        for(i=0; i<boardArray.length;i++){
+            if(!boardArray[i].contains(undefined)){
+                return true
+            }
+        }
+        return false
     }
 
     return{
-        checkWin
+        checkWin,
+        checkTie
     }
 
 })()
 
-gameState.checkWin()
 
 const player = (playerSign) =>{
 
@@ -103,3 +126,5 @@ const player = (playerSign) =>{
     }
 
 }
+
+console.log(gameState.checkWin())
