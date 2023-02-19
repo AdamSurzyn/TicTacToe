@@ -159,13 +159,14 @@ let playerX = player("X")
 let playerO = player("O")
 
 board.addEventListener("click", (e) =>{
-    if(gameState.isFirstTurn()){
+    if(gameState.isFirstTurn() && (e.target.innerText == "")){
+        
         e.target.innerText = "X"
         playingNow = gameState.nextPlayer("X")
         gameBoard.rerenderBoard()
         gameState.checkWin()
         gameState.checkTie()
-    }else{
+    }else if (e.target.innerText == ""){
         e.target.innerText = playingNow
         playingNow = gameState.nextPlayer(playingNow)
         gameBoard.rerenderBoard()
