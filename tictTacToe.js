@@ -131,7 +131,27 @@ const gameState = (() => {
     return nextPlayer
     }
 
+    const playTurn = (e) => {
+
+        let gameWon
+        let gameTie
+
+        if(gameState.isFirstTurn()){
+            e.target.innerText = "X"
+            playingNow = gameState.nextPlayer("X")
+            gameBoard.rerenderBoard()
+
+        }else if (e.target.innerText == ""){
+            e.target.innerText = playingNow
+            playingNow = gameState.nextPlayer(playingNow)
+            gameBoard.rerenderBoard()
+            gameWon = gameState.checkWin()
+            gameTie = gameState.checkTie()
+        }
+    }
+
     return{
+        playTurn,
         checkWin,
         checkTie,
         isFirstTurn,
@@ -158,21 +178,9 @@ const player = (mark) =>{
 let playerX = player("X")
 let playerO = player("O")
 
-board.addEventListener("click", (e) =>{
-    if(gameState.isFirstTurn() && (e.target.innerText == "")){
-        
-        e.target.innerText = "X"
-        playingNow = gameState.nextPlayer("X")
-        gameBoard.rerenderBoard()
-        gameState.checkWin()
-        gameState.checkTie()
-    }else if (e.target.innerText == ""){
-        e.target.innerText = playingNow
-        playingNow = gameState.nextPlayer(playingNow)
-        gameBoard.rerenderBoard()
-        gameState.checkWin()
-        gameState.checkTie()
-    }
+board.addEventListener("click", (e)=>{
+    gameState.playTurn(e)
 })
+
 
 console.log(gameState.isFirstTurn())
